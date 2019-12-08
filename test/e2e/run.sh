@@ -45,7 +45,7 @@ export K8S_VERSION=${K8S_VERSION:-v1.15.3}
 
 KIND_CLUSTER_NAME="ingress-nginx-dev"
 
-kind --version || $(echo "Please install kind before running e2e tests";exit 1)
+kind --version || (echo "Please install kind before running e2e tests";exit 1)
 
 echo "[dev-env] creating Kubernetes cluster with kind"
 
