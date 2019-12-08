@@ -47,6 +47,11 @@ KIND_CLUSTER_NAME="ingress-nginx-dev"
 
 kind --version || (echo "Please install kind before running e2e tests";exit 1)
 
+if kind get clusters | grep -qE "^$KIND_CLUSTER_NAME\$"; then
+  echo "[dev-env] Cluster \"$KIND_CLUSTER_NAME\" already exists. Removing it first."
+  kind delete cluster --name "$KIND_CLUSTER_NAME"
+fi
+
 echo "[dev-env] creating Kubernetes cluster with kind"
 
 export KUBECONFIG="${HOME}/.kube/kind-config-${KIND_CLUSTER_NAME}"
