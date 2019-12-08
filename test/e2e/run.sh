@@ -16,7 +16,7 @@
 
 KIND_LOG_LEVEL="info"
 
-if ! [ -z $DEBUG ]; then
+if ! [ -z "$DEBUG" ]; then
   set -x
   KIND_LOG_LEVEL="debug"
 fi
@@ -53,7 +53,7 @@ export KUBECONFIG="${HOME}/.kube/kind-config-${KIND_CLUSTER_NAME}"
 kind create cluster \
   --loglevel=${KIND_LOG_LEVEL} \
   --name ${KIND_CLUSTER_NAME} \
-  --config ${DIR}/kind.yaml \
+  --config "${DIR}/kind.yaml" \
   --image "kindest/node:${K8S_VERSION}"
 
 echo "Kubernetes cluster:"
@@ -77,15 +77,15 @@ docker pull openresty/openresty:1.15.8.2-alpine
 
 echo "[dev-env] copying docker images to cluster..."
 echo "
-kind load docker-image --name="${KIND_CLUSTER_NAME}" nginx-ingress-controller:e2e
-kind load docker-image --name="${KIND_CLUSTER_NAME}" ${REGISTRY}/nginx-ingress-controller:${TAG}
-kind load docker-image --name="${KIND_CLUSTER_NAME}" ${REGISTRY}/fastcgi-helloserver:${TAG}
-kind load docker-image --name="${KIND_CLUSTER_NAME}" openresty/openresty:1.15.8.2-alpine
-kind load docker-image --name="${KIND_CLUSTER_NAME}" ${REGISTRY}/httpbin:${TAG}
+kind load docker-image --name=${KIND_CLUSTER_NAME} nginx-ingress-controller:e2e
+kind load docker-image --name=${KIND_CLUSTER_NAME} ${REGISTRY}/nginx-ingress-controller:${TAG}
+kind load docker-image --name=${KIND_CLUSTER_NAME} ${REGISTRY}/fastcgi-helloserver:${TAG}
+kind load docker-image --name=${KIND_CLUSTER_NAME} openresty/openresty:1.15.8.2-alpine
+kind load docker-image --name=${KIND_CLUSTER_NAME} ${REGISTRY}/httpbin:${TAG}
 " | parallel --progress
 
 echo "[dev-env] running e2e tests..."
-make -C ${DIR}/../../ e2e-test
+make -C "${DIR}/../../" e2e-test
 
 kind delete cluster \
   --loglevel=${KIND_LOG_LEVEL} \
